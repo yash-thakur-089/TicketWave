@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TicketWave - Book Flights, Trains, Buses, Movies</title>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="./style.css">
+  <!-- jsPDF for ticket generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
+  
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo" onclick="showHomepage()">TicketWave</div>
+    <div class="nav-links">
+      <a href="#offers">Offers</a>
+      <a href="#help">Help</a>
+      <button id="navLoginBtn" class="primary-btn">Login/Signup</button>
+      <div id="userGreeting" class="user-greeting" style="display: none;" onclick="toggleUserMenu(event)">
+        <span id="greetingText"></span>
+        <i class="fas fa-user"></i>
+        <div class="user-menu">
+          <div class="user-menu-item" onclick="showDashboard()">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+          </div>
+          <div class="user-menu-item" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </div>
+        </div>
+      </div>
+      <button class="theme-toggle" onclick="toggleDarkMode()">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Homepage -->
+  <div id="homepage" class="homepage">
+    <div class="hero">
+      <h1 class="animate__animated animate__fadeIn">Travel Smarter with TicketWave</h1>
+      <p class="animate__animated animate__fadeIn animate__delay-1s">Book flights, trains, buses, and movies in one place!</p>
+      <button class="book-now-btn animate__animated animate__fadeIn animate__delay-2s" onclick="showChatbot()">
+        Book Now <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+
+    <div class="search-widgets">
+      <div class="search-tab animate__animated animate__fadeIn animate__delay-3s" onclick="showChatbot('flight')">
+        <i class="fas fa-plane"></i>
+        <h3>Flights</h3>
+        <p>Book domestic & international flights</p>
+      </div>
+      <div class="search-tab animate__animated animate__fadeIn animate__delay-4s" onclick="showChatbot('train')">
+        <i class="fas fa-train"></i>
+        <h3>Trains</h3>
+        <p>Reserve train tickets with ease</p>
+      </div>
+      <div class="search-tab animate__animated animate__fadeIn animate__delay-5s" onclick="showChatbot('bus')">
+        <i class="fas fa-bus"></i>
+        <h3>Buses</h3>
+        <p>Comfortable bus journeys</p>
+      </div>
+      <div class="search-tab animate__animated animate__fadeIn animate__delay-6s" onclick="showChatbot('movie')">
+        <i class="fas fa-film"></i>
+        <h3>Movies</h3>
+        <p>Book tickets for latest movies</p>
+      </div>
+    </div>
+
+    <!-- Trending Movies Section -->
+    <div class="movies-section">
+      <h2 class="section-title">Trending Movies</h2>
+      <div class="items-grid">
+        <div class="item-card" onclick="showMovieDetails('avengers')">
+          <div class="item-img movie-img" style="background: linear-gradient(135deg, #434343, #000000);">
+            <i class="fas fa-film"></i>
+          </div>
+          <div class="item-details">
+            <h3>Avengers: Endgame</h3>
+            <div class="item-meta">
+              <span>Action</span>
+              <span>3h 1m</span>
+            </div>
+            <div class="item-price">₹250 - ₹500</div>
+            <button class="secondary-btn" onclick="showChatbot('movie', 'avengers')">Book Now</button>
+          </div>
+        </div>
+        <div class="item-card" onclick="showMovieDetails('jawan')">
+          <div class="item-img movie-img" style="background: linear-gradient(135deg, #8E0E00, #1F1C18);">
+            <i class="fas fa-film"></i>
+          </div>
+          <div class="item-details">
+            <h3>Jawan</h3>
+            <div class="item-meta">
+              <span>Action</span>
+              <span>2h 49m</span>
+            </div>
+            <div class="item-price">₹200 - ₹450</div>
+            <button class="secondary-btn" onclick="showChatbot('movie', 'jawan')">Book Now</button>
+          </div>
+        </div>
+        <div class="item-card" onclick="showMovieDetails('pathaan')">
+          <div class="item-img movie-img" style="background: linear-gradient(135deg, #3a7bd5, #00d2ff);">
+            <i class="fas fa-film"></i>
+          </div>
+          <div class="item-details">
+            <h3>Pathaan</h3>
+            <div class="item-meta">
+              <span>Action</span>
+              <span>2h 26m</span>
+            </div>
+            <div class="item-price">₹220 - ₹480</div>
+            <button class="secondary-btn" onclick="showChatbot('movie', 'pathaan')">Book Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popular Flights Section -->
+    <div class="flights-section">
+      <h2 class="section-title">Popular Flights</h2>
+      <div class="items-grid">
+        <div class="item-card" onclick="showFlightDetails('del-mum')">
+          <div class="item-img flight-img">
+            <i class="fas fa-plane"></i>
+          </div>
+          <div class="item-details">
+            <h3>Delhi → Mumbai</h3>
+            <div class="item-meta">
+              <span>IndiGo, Air India</span>
+              <span>2h 15m</span>
+            </div>
+            <div class="item-price">₹3,499 onwards</div>
+            <button class="secondary-btn" onclick="showChatbot('flight', 'del-mum')">Book Now</button>
+          </div>
+        </div>
+        <div class="item-card" onclick="showFlightDetails('mum-bang')">
+          <div class="item-img flight-img">
+            <i class="fas fa-plane"></i>
+          </div>
+          <div class="item-details">
+            <h3>Mumbai → Bangalore</h3>
+            <div class="item-meta">
+              <span>Vistara, SpiceJet</span>
+              <span>1h 45m</span>
+            </div>
+            <div class="item-price">₹2,999 onwards</div>
+            <button class="secondary-btn" onclick="showChatbot('flight', 'mum-bang')">Book Now</button>
+          </div>
+        </div>
+        <div class="item-card" onclick="showFlightDetails('del-goa')">
+          <div class="item-img flight-img">
+            <i class="fas fa-plane"></i>
+          </div>
+          <div class="item-details">
+            <h3>Delhi → Goa</h3>
+            <div class="item-meta">
+              <span>GoAir, AirAsia</span>
+              <span>2h 30m</span>
+            </div>
+            <div class="item-price">₹4,299 onwards</div>
+            <button class="secondary-btn" onclick="showChatbot('flight', 'del-goa')">Book Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth Screen -->
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-box">
+      <h1>TicketWave</h1>
+      
+      <div id="loginForm">
+        <input type="text" id="loginUsername" placeholder="Username" class="animate__animated animate__fadeIn" aria-label="Username">
+        <div id="usernameError" class="error-message">Username is required</div>
+        
+        <input type="password" id="loginPassword" placeholder="Password" class="animate__animated animate__fadeIn animate__delay-1s" aria-label="Password">
+        <div id="passwordError" class="error-message">Password is required</div>
+        
+        <button onclick="login()" class="auth-btn animate__animated animate__fadeIn animate__delay-2s">
+          <span id="loginText">Login</span> <i class="fas fa-arrow-right"></i>
+        </button>
+        
+        <div class="toggle-auth animate__animated animate__fadeIn animate__delay-3s" onclick="toggleAuthForm()">
+          <span id="toggleAuthText">Don't have an account? Register</span>
+        </div>
+      </div>
+      
+      <div id="registerForm" style="display: none;">
+        <input type="text" id="registerUsername" placeholder="Username" aria-label="Username">
+        <div id="registerUsernameError" class="error-message">Username must be at least 4 characters</div>
+        
+        <input type="email" id="registerEmail" placeholder="Email" aria-label="Email">
+        <div id="emailError" class="error-message">Valid email is required</div>
+        
+        <input type="password" id="registerPassword" placeholder="Password" aria-label="Password">
+        <div id="registerPasswordError" class="error-message">Password must be at least 6 characters</div>
+        
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" aria-label="Confirm Password">
+        <div id="confirmPasswordError" class="error-message">Passwords don't match</div>
+        
+        <button onclick="register()" class="auth-btn">
+          <span id="registerText">Register</span> <i class="fas fa-user-plus"></i>
+        </button>
+        
+        <div class="toggle-auth" onclick="toggleAuthForm()">
+          <span id="toggleLoginText">Already have an account? Login</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="dashboard">
+    <div class="greeting">
+      <button class="back-btn" onclick="showHomepage()">
+        <i class="fas fa-arrow-left"></i> Back to Home
+      </button>
+      <h2>Welcome back, <span id="userName"></span>!</h2>
+      <p>Here's your booking summary</p>
+    </div>
+    
+    <div class="stats-container">
+      <div class="stat-card">
+        <h3>Total Bookings</h3>
+        <p id="totalBookings">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Upcoming Trips</h3>
+        <p id="upcomingTrips">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Reward Points</h3>
+        <p id="rewardPoints">0</p>
+      </div>
+    </div>
+    
+    <h3 class="section-title">Your Recent Bookings</h3>
+    
+    <div class="booking-cards" id="bookingCards">
+      <!-- Bookings will be added here dynamically -->
+    </div>
+    
+    <button onclick="showChatbot()" class="primary-btn" style="margin-top: 30px;">
+      <i class="fas fa-plus"></i> New Booking
+    </button>
+  </div>
+
+  <!-- Chatbot Screen -->
+  <div id="chatbotScreen" class="chatbot-screen">
+    <div class="chat-header">
+      <button class="back-btn" onclick="goBackFromChatbot()">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+      <h2>TicketWave Assistant</h2>
+    </div>
+    
+    <div id="chatbot">
+      <button class="back-btn" onclick="showHomepage()">
+        <i class="fas fa-arrow-left"></i> Back to Home
+      </button>
+      <div class="bot-msg">Welcome to TicketWave! What would you like to book today? (Flights/Trains/Buses/Movies)</div>
+    </div>
+    
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Type your choice..." class="chat-input" onkeypress="handleKeyPress(event)" aria-label="Chat input">
+      <button onclick="sendMessage()" class="send-btn" aria-label="Send message">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Payment Screen -->
+  <div id="paymentScreen" class="payment-screen">
+    <div class="chat-header">
+      <button class="back-btn" onclick="goBackFromPayment()">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+      <h2 id="paymentTitle">Complete Your Payment</h2>
+      <div style="width: 40px;"></div> <!-- Spacer for alignment -->
+    </div>
+    <p id="paymentSubtitle">Choose your preferred method</p>
+    
+    <div class="payment-card animate__animated animate__fadeIn animate__delay-1s">
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="card-logo">
+            <i class="fab fa-cc-visa"></i>
+          </div>
+          <div class="card-number">•••• •••• •••• 4242</div>
+          <div class="card-details">
+            <div>TicketWave</div>
+            <div>VIP Member</div>
+          </div>
+        </div>
+        <div class="card-back">
+          <div style="flex: 1;"></div>
+          <div style="background: #fff; height: 40px; display: flex; align-items: center; padding: 0 10px; color: #000;">
+            <div style="width: 100%; height: 20px; background: #ddd;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="payment-options">
+      <button onclick="pay('gpay')" class="pay-btn animate__animated animate__fadeIn animate__delay-2s">
+        <i class="fab fa-google-pay"></i> <span id="gpayText">GPay</span>
+      </button>
+      <button onclick="pay('paytm')" class="pay-btn animate__animated animate__fadeIn animate__delay-3s">
+        <i class="fas fa-wallet"></i> <span id="paytmText">Paytm</span>
+      </button>
+      <button onclick="pay('card')" class="pay-btn animate__animated animate__fadeIn animate__delay-4s">
+        <i class="far fa-credit-card"></i> <span id="cardText">Card</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Ticket Screen -->
+  <div id="ticketScreen" class="ticket-screen">
+    <div class="chat-header">
+      <button class="back-btn" onclick="goBackFromTicket()">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+      <h2 id="ticketHeader">Your Ticket</h2>
+    </div>
+    
+    <div class="ticket" id="ticketToDownload">
+      <div class="ticket-header">
+        <div>
+          <h3 id="ticketType">Movie Ticket</h3>
+          <div id="ticketId">ID: #TW-2023-001</div>
+        </div>
+        <div class="ticket-qr">
+          <i class="fas fa-qrcode fa-2x"></i>
+        </div>
+      </div>
+      
+      <div class="ticket-details">
+        <div class="ticket-detail">
+          <label id="nameLabel">Name</label>
+          <span id="ticketName">John Doe</span>
+        </div>
+        <div class="ticket-detail">
+          <label id="dateLabel">Date</label>
+          <span id="ticketDate">15 Oct 2023</span>
+        </div>
+        <div class="ticket-detail">
+          <label id="timeLabel">Time</label>
+          <span id="ticketTime">7:30 PM</span>
+        </div>
+        <div class="ticket-detail">
+          <label id="locationLabel">Location</label>
+          <span id="ticketLocation">Cineplex Downtown</span>
+        </div>
+        <div class="ticket-detail">
+          <label id="seatLabel">Seat</label>
+          <span id="ticketSeat">B12 (Middle)</span>
+        </div>
+        <div class="ticket-detail">
+          <label id="priceLabel">Price</label>
+          <span id="ticketPrice">₹300</span>
+        </div>
+      </div>
+    </div>
+    
+    <button onclick="downloadTicket()" class="download-btn">
+      <i class="fas fa-download"></i> <span id="downloadText">Download Ticket</span>
+    </button>
+    
+    <button onclick="viewHistory()" class="download-btn history-btn">
+      <i class="fas fa-history"></i> <span id="historyText">View Booking History</span>
+    </button>
+  </div>
+
+  <!-- Booking History Screen -->
+  <div id="historyScreen" class="history-screen">
+    
+    <button class="back-btn" onclick="showHomepage()">
+      <i class="fas fa-arrow-left"></i> Back to Home
+    </button>
+    
+    <h2 id="historyHeader">Booking History</h2>
+    
+    <div id="historyList">
+      <!-- History items will be added here dynamically -->
+    </div>
+  </div>
+
+  <!-- Date Picker Modal -->
+  <div id="datePicker" class="date-picker">
+    <div class="date-picker-content">
+      <div class="date-picker-header">
+        <div class="date-picker-title" id="datePickerTitle">Select Date</div>
+        <button class="date-picker-close" onclick="closeDatePicker()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="date-picker-calendar" id="calendar">
+        <!-- Calendar will be generated here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Location Picker Modal -->
+  <div id="locationPicker" class="location-picker">
+    <div class="location-picker-content">
+      <div class="location-picker-header">
+        <div class="location-picker-title" id="locationPickerTitle">Select Location</div>
+        <button class="location-picker-close" onclick="closeLocationPicker()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="location-options" id="locationOptions">
+        <!-- Location options will be added here dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Movie Picker Modal -->
+  <div id="moviePicker" class="movie-picker">
+    <div class="movie-picker-content">
+      <div class="movie-picker-header">
+        <div class="movie-picker-title" id="moviePickerTitle">Select Movie</div>
+        <button class="movie-picker-close" onclick="closeMoviePicker()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="movie-options" id="movieOptions">
+        <!-- Movie options will be added here dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize jsPDF
+    const { jsPDF } = window.jspdf;
+    
+    // User credentials and state
+    let currentUser = null;
+    let bookings = JSON.parse(localStorage.getItem('ticketWaveBookings')) || [];
+    let currentBooking = {};
+    let isDarkMode = localStorage.getItem('darkMode') === 'true';
+    let bookingStep = 0;
+    let bookingType = '';
+    let bookingClass = '';
+    let bookingSeat = '';
+    let selectedDate = '';
+    let selectedFrom = '';
+    let selectedTo = '';
+    let selectedMovie = '';
+    
+    // Prices for different options
+    const prices = {
+      train: { 
+        general: 100, 
+        sleeper: 200, 
+        ac: 300,
+        classOptions: ["General (₹100)", "Sleeper (₹200)", "AC (₹300)"]
+      },
+      flight: { 
+        economy: 2000, 
+        business: 5000, 
+        first: 8000,
+        classOptions: ["Economy (₹2000)", "Business (₹5000)", "First Class (₹8000)"]
+      },
+      bus: { 
+        ac: 800, 
+        nonAc: 500, 
+        sleeper: 1200,
+        classOptions: ["AC (₹800)", "Non-AC (₹500)", "Sleeper (₹1200)"]
+      },
+      movie: { 
+        standard: 200, 
+        premium: 350, 
+        recliner: 500,
+        classOptions: ["Standard (₹200)", "Premium (₹350)", "Recliner (₹500)"]
+      }
+    };
+    
+    // Locations for different booking types
+    const locations = {
+      train: {
+        from: ["Delhi", "Mumbai", "Chennai", "Kolkata", "Bangalore", "Hyderabad"],
+        to: ["Delhi", "Mumbai", "Chennai", "Kolkata", "Bangalore", "Hyderabad"]
+      },
+      flight: {
+        from: ["Delhi (DEL)", "Mumbai (BOM)", "Bangalore (BLR)", "Kolkata (CCU)", "Chennai (MAA)", "Hyderabad (HYD)"],
+        to: ["Delhi (DEL)", "Mumbai (BOM)", "Bangalore (BLR)", "Kolkata (CCU)", "Chennai (MAA)", "Hyderabad (HYD)"]
+      },
+      bus: {
+        from: ["Delhi", "Mumbai", "Bangalore", "Kolkata", "Chennai", "Hyderabad"],
+        to: ["Delhi", "Mumbai", "Bangalore", "Kolkata", "Chennai", "Hyderabad"]
+      },
+      movie: {
+        theaters: ["PVR Phoenix", "INOX Megaplex", "Cinepolis", "IMAX Forum", "Carnival Cinemas"],
+        movies: [
+          { id: "avengers", name: "Avengers: Endgame", genre: "Action", duration: "3h 1m" },
+          { id: "jawan", name: "Jawan", genre: "Action", duration: "2h 49m" },
+          { id: "pathaan", name: "Pathaan", genre: "Action", duration: "2h 26m" },
+          { id: "brahmastra", name: "Brahmāstra", genre: "Fantasy", duration: "2h 47m" },
+          { id: "rrr", name: "RRR", genre: "Action", duration: "3h 7m" }
+        ]
+      }
+    };
+    
+    // Popular routes with prices
+    const popularRoutes = {
+      "del-mum": { from: "Delhi (DEL)", to: "Mumbai (BOM)", price: 3499, duration: "2h 15m" },
+      "mum-bang": { from: "Mumbai (BOM)", to: "Bangalore (BLR)", price: 2999, duration: "1h 45m" },
+      "del-goa": { from: "Delhi (DEL)", to: "Goa (GOI)", price: 4299, duration: "2h 30m" }
+    };
+    
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', function() {
+      if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        document.querySelectorAll('.theme-toggle i').forEach(icon => {
+          icon.classList.remove('fa-moon');
+          icon.classList.add('fa-sun');
+        });
+      }
+      
+      // Check if user is logged in
+      const loggedInUser = localStorage.getItem('currentUser');
+      if (loggedInUser) {
+        currentUser = JSON.parse(loggedInUser);
+        updateUserGreeting();
+        showDashboard();
+      }
+      
+      // Event listeners
+      document.getElementById('navLoginBtn').addEventListener('click', showAuthScreen);
+      
+      // Generate calendar
+      generateCalendar();
+    });
+    
+    // Update user greeting in navbar
+    function updateUserGreeting() {
+      if (currentUser) {
+        document.getElementById('navLoginBtn').style.display = 'none';
+        const greeting = document.getElementById('userGreeting');
+        greeting.style.display = 'flex';
+        document.getElementById('greetingText').textContent = `Hi, ${currentUser.username}`;
+      } else {
+        document.getElementById('navLoginBtn').style.display = 'block';
+        document.getElementById('userGreeting').style.display = 'none';
+      }
+    }
+    
+    // Toggle user menu
+    function toggleUserMenu() {
+      const menu = document.querySelector('.user-menu');
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+    
+    // Close user menu when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.user-greeting')) {
+        document.querySelector('.user-menu').style.display = 'none';
+      }
+    });
+    
+    // Show homepage
+    function showHomepage() {
+      document.getElementById('authScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('chatbotScreen').style.display = 'none';
+      document.getElementById('paymentScreen').style.display = 'none';
+      document.getElementById('ticketScreen').style.display = 'none';
+      document.getElementById('historyScreen').style.display = 'none';
+      document.getElementById('homepage').style.display = 'block';
+    }
+    
+    // Show auth screen
+    function showAuthScreen() {
+      document.getElementById('authScreen').style.display = 'flex';
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('registerForm').style.display = 'none';
+    }
+    
+    // Hide auth screen
+    function hideAuthScreen() {
+      document.getElementById('authScreen').style.display = 'none';
+    }
+    
+    // Show dashboard
+    function showDashboard() {
+      document.getElementById('homepage').style.display = 'none';
+      document.getElementById('authScreen').style.display = 'none';
+      document.getElementById('chatbotScreen').style.display = 'none';
+      document.getElementById('paymentScreen').style.display = 'none';
+      document.getElementById('ticketScreen').style.display = 'none';
+      document.getElementById('historyScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      
+      document.getElementById('userName').textContent = currentUser.username;
+      
+      // Load user stats
+      const userBookings = bookings.filter(b => b.userId === currentUser.id);
+      document.getElementById('totalBookings').textContent = userBookings.length;
+      
+      // Count upcoming trips (in next 30 days)
+      const today = new Date();
+      const upcoming = userBookings.filter(b => {
+        const bookingDate = new Date(b.timestamp);
+        return bookingDate > today && bookingDate < new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
+      });
+      document.getElementById('upcomingTrips').textContent = upcoming.length;
+      
+      // Calculate reward points (1 point per ₹100 spent)
+      const points = userBookings.reduce((sum, b) => sum + Math.floor(b.price / 100), 0);
+      document.getElementById('rewardPoints').textContent = points;
+      
+      // Load user's bookings
+      const bookingCards = document.getElementById('bookingCards');
+      bookingCards.innerHTML = '';
+      
+      if (userBookings.length === 0) {
+        bookingCards.innerHTML = '<div class="bot-msg">No bookings yet. Start by clicking "New Booking"!</div>';
+        return;
+      }
+      
+      // Sort by most recent
+      userBookings.sort((a, b) => b.timestamp - a.timestamp);
+      
+      // Show only last 5 bookings
+      userBookings.slice(0, 5).forEach(booking => {
+        const card = document.createElement('div');
+        card.className = 'booking-card';
+        
+        let locationInfo = '';
+        if (booking.type === 'movie') {
+          locationInfo = `<p>Theater: ${booking.location}</p>`;
+        } else {
+          locationInfo = `<p>From: ${booking.from} To: ${booking.to}</p>`;
+        }
+        
+        card.innerHTML = `
+          <h3>${booking.type.charAt(0).toUpperCase() + booking.type.slice(1)} Ticket</h3>
+          <p>ID: ${booking.id}</p>
+          <p>Date: ${booking.date} • ${booking.time}</p>
+          ${locationInfo}
+          <p>Price: ₹${booking.price}</p>
+          <div class="booking-actions">
+            <button class="action-btn download-btn" onclick="downloadBooking('${booking.id}')">
+              <i class="fas fa-download"></i> Ticket
+            </button>
+            <button class="action-btn cancel-btn" onclick="cancelBooking('${booking.id}')">
+              <i class="fas fa-times"></i> Cancel
+            </button>
+          </div>
+        `;
+        bookingCards.appendChild(card);
+      });
+    }
+    
+    // Show chatbot with optional pre-selected type and item
+    function showChatbot(type = '', item = '') {
+      if (!currentUser) {
+        showAuthScreen();
+        return;
+      }
+      
+      // Reset booking process
+      bookingStep = 0;
+      bookingType = type;
+      selectedFrom = '';
+      selectedTo = '';
+      selectedMovie = '';
+      selectedDate = '';
+      
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('homepage').style.display = 'none';
+      document.getElementById('chatbotScreen').style.display = 'flex';
+      
+      const chatbot = document.getElementById('chatbot');
+      chatbot.innerHTML = '';
+      
+      // If coming from a specific booking (like clicking "Book Now" on a movie)
+      if (type && item) {
+        if (type === 'movie') {
+          const movie = locations.movie.movies.find(m => m.id === item);
+          if (movie) {
+            selectedMovie = movie.name;
+            addBotMessage(`You selected: ${movie.name}`);
+            bookingStep = 2; // Skip to theater selection
+            setTimeout(() => askForTheater(), 800);
+          }
+        } else if (type === 'flight' && popularRoutes[item]) {
+          const route = popularRoutes[item];
+          selectedFrom = route.from;
+          selectedTo = route.to;
+          addBotMessage(`You selected: ${route.from} → ${route.to}`);
+          bookingStep = 3; // Skip to date selection
+          setTimeout(() => askForDate(), 800);
+        }
+      } else if (type) {
+        // If just selecting a type (like "Flights")
+        addBotMessage(`Great! Let's book a ${type} ticket.`);
+        bookingStep = 1;
+        
+        if (type === 'movie') {
+          setTimeout(() => askForMovie(), 800);
+        } else {
+          setTimeout(() => askForDeparture(), 800);
+        }
+      } else {
+        // Fresh start
+        addBotMessage("Welcome to TicketWave! What would you like to book today? (Flights/Trains/Buses/Movies)");
+      }
+    }
+    
+    // Go back from chatbot
+    function goBackFromChatbot() {
+      if (bookingStep > 0) {
+        bookingStep--;
+        const chatbot = document.getElementById('chatbot');
+        const lastBotMsg = chatbot.querySelectorAll('.bot-msg');
+        lastBotMsg[lastBotMsg.length - 1].remove();
+        
+        // Remove user's last message if any
+        const lastUserMsg = chatbot.querySelectorAll('.user-msg');
+        if (lastUserMsg.length > 0) {
+          lastUserMsg[lastUserMsg.length - 1].remove();
+        }
+        
+        // Show appropriate message based on step
+        if (bookingStep === 0) {
+          addBotMessage("What would you like to book today? (Flights/Trains/Buses/Movies)");
+        } else if (bookingStep === 1) {
+          if (bookingType === 'movie') {
+            addBotMessage("Please select a movie:");
+            askForMovie();
+          } else {
+            addBotMessage(`Please select departure ${bookingType === 'flight' ? 'airport' : 'station'}:`);
+            askForDeparture();
+          }
+        } else if (bookingStep === 2) {
+          if (bookingType === 'movie') {
+            askForTheater();
+          } else {
+            askForDestination();
+          }
+        } else if (bookingStep === 3) {
+          askForDate();
+        } else if (bookingStep === 4) {
+          askForClass();
+        }
+      } else {
+        showDashboard();
+      }
+    }
+    
+    // Go back from payment screen
+    function goBackFromPayment() {
+      document.getElementById('paymentScreen').style.display = 'none';
+      document.getElementById('chatbotScreen').style.display = 'flex';
+      
+      // Reset payment title
+      document.getElementById('paymentTitle').textContent = "Complete Your Payment";
+    }
+    
+    // Go back from ticket screen
+    function goBackFromTicket() {
+      document.getElementById('ticketScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+    }
+    
+    // Go back from history screen
+    function goBackFromHistory() {
+      document.getElementById('historyScreen').style.display = 'none';
+      document.getElementById('ticketScreen').style.display = 'flex';
+    }
+    
+    // Auth functions
+    function toggleAuthForm() {
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      
+      if (loginForm.style.display === 'none') {
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+      } else {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+      }
+    }
+    
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+    
+    function login() {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      let isValid = true;
+      
+      // Reset errors
+      document.getElementById('usernameError').style.display = 'none';
+      document.getElementById('passwordError').style.display = 'none';
+      
+      // Validate username
+      if (!username) {
+        document.getElementById('usernameError').style.display = 'block';
+        isValid = false;
+      }
+      
+      // Validate password
+      if (!password) {
+        document.getElementById('passwordError').style.display = 'block';
+        isValid = false;
+      }
+      
+      if (!isValid) return;
+      
+      // Check credentials (in a real app, this would be a server call)
+      const users = JSON.parse(localStorage.getItem('ticketWaveUsers')) || [];
+      const user = users.find(u => u.username === username && u.password === password);
+      
+      if (user) {
+        currentUser = user;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        updateUserGreeting();
+        hideAuthScreen();
+        showDashboard();
+      } else {
+        alert('Invalid username or password');
+      }
+    }
+    
+    function register() {
+      const username = document.getElementById('registerUsername').value.trim();
+      const email = document.getElementById('registerEmail').value.trim();
+      const password = document.getElementById('registerPassword').value.trim();
+      const confirmPassword = document.getElementById('confirmPassword').value.trim();
+      let isValid = true;
+      
+      // Reset errors
+      document.getElementById('registerUsernameError').style.display = 'none';
+      document.getElementById('emailError').style.display = 'none';
+      document.getElementById('registerPasswordError').style.display = 'none';
+      document.getElementById('confirmPasswordError').style.display = 'none';
+      
+      // Validate username
+      if (username.length < 4) {
+        document.getElementById('registerUsernameError').style.display = 'block';
+        isValid = false;
+      }
+      
+      // Validate email
+      if (!validateEmail(email)) {
+        document.getElementById('emailError').style.display = 'block';
+        isValid = false;
+      }
+      
+      // Validate password
+      if (password.length < 6) {
+        document.getElementById('registerPasswordError').style.display = 'block';
+        isValid = false;
+      }
+      
+      // Validate confirm password
+      if (password !== confirmPassword) {
+        document.getElementById('confirmPasswordError').style.display = 'block';
+        isValid = false;
+      }
+      
+      if (!isValid) return;
+      
+      // Check if username exists (in a real app, this would be a server call)
+      const users = JSON.parse(localStorage.getItem('ticketWaveUsers')) || [];
+      if (users.some(u => u.username === username)) {
+        alert('Username already exists');
+        return;
+      }
+      
+      // Create new user
+      const newUser = {
+        id: Date.now().toString(),
+        username,
+        email,
+        password // In a real app, password should be hashed
+      };
+      
+      users.push(newUser);
+      localStorage.setItem('ticketWaveUsers', JSON.stringify(users));
+      
+      // Auto-login
+      currentUser = newUser;
+      localStorage.setItem('currentUser', JSON.stringify(newUser));
+      updateUserGreeting();
+      hideAuthScreen();
+      showDashboard();
+      
+      alert('Registration successful!');
+      toggleAuthForm();
+    }
+    
+    // Dark mode toggle
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      localStorage.setItem('darkMode', isDarkMode);
+      document.body.classList.toggle('dark-mode');
+      
+      // Update the icon
+      const themeIcons = document.querySelectorAll('.theme-toggle i');
+      themeIcons.forEach(icon => {
+        if (isDarkMode) {
+          icon.classList.remove('fa-moon');
+          icon.classList.add('fa-sun');
+        } else {
+          icon.classList.remove('fa-sun');
+          icon.classList.add('fa-moon');
+        }
+      });
+    }
+    
+    // Chatbot functions
+    function addBotMessage(text) {
+      const chatbot = document.getElementById('chatbot');
+      const msg = document.createElement('div');
+      msg.className = 'bot-msg';
+      msg.innerHTML = text;
+      chatbot.appendChild(msg);
+      chatbot.scrollTop = chatbot.scrollHeight;
+    }
+    
+    function sendMessage() {
+      const userInput = document.getElementById('userInput').value.trim();
+      const chatbot = document.getElementById('chatbot');
+      
+      if (!userInput) return;
+      
+      // Add user message
+      const userMsg = document.createElement('div');
+      userMsg.className = 'user-msg';
+      userMsg.textContent = userInput;
+      chatbot.appendChild(userMsg);
+      document.getElementById('userInput').value = '';
+      chatbot.scrollTop = chatbot.scrollHeight;
+      
+      // Process bot response
+      setTimeout(() => {
+        processUserInput(userInput);
+      }, 800);
+    }
+    
+    function processUserInput(input) {
+      const inputLower = input.toLowerCase();
+      
+      if (bookingStep === 0) {
+        // Step 0: Select booking type
+        if (/train|flight|bus|movie/.test(inputLower)) {
+          bookingType = inputLower.match(/train|flight|bus|movie/)[0];
+          addBotMessage(`Great! Let's book a ${bookingType} ticket.`);
+          bookingStep = 1;
+          
+          if (bookingType === 'movie') {
+            setTimeout(() => askForMovie(), 800);
+          } else {
+            setTimeout(() => askForDeparture(), 800);
+          }
+        } else {
+          addBotMessage("Please select a valid option: Flights, Trains, Buses, or Movies");
+        }
+      } 
+      else if (bookingStep === 1) {
+        // Step 1: Departure location or movie selection
+        if (bookingType === 'movie') {
+          // Handle movie selection
+          const movie = locations.movie.movies.find(m => 
+            m.name.toLowerCase().includes(inputLower) || 
+            m.id.toLowerCase().includes(inputLower)
+          );
+          
+          if (movie) {
+            selectedMovie = movie.name;
+            addBotMessage(`You selected: ${movie.name}`);
+            bookingStep = 2;
+            setTimeout(() => askForTheater(), 800);
+          } else {
+            addBotMessage("Please select a valid movie from the list");
+            askForMovie();
+          }
+        } else {
+          // Handle departure location
+          const validLocations = locations[bookingType].from;
+          if (validLocations.some(loc => loc.toLowerCase().includes(inputLower))) {
+            selectedFrom = validLocations.find(loc => loc.toLowerCase().includes(inputLower));
+            addBotMessage(`Departure: ${selectedFrom}`);
+            bookingStep = 2;
+            setTimeout(() => askForDestination(), 800);
+          } else {
+            addBotMessage("Please select a valid location from the list");
+            askForDeparture();
+          }
+        }
+      }
+      else if (bookingStep === 2) {
+        // Step 2: Destination location or theater selection
+        if (bookingType === 'movie') {
+          // Handle theater selection
+          const validTheaters = locations.movie.theaters;
+          if (validTheaters.some(theater => theater.toLowerCase().includes(inputLower))) {
+            selectedTo = validTheaters.find(theater => theater.toLowerCase().includes(inputLower));
+            addBotMessage(`Theater: ${selectedTo}`);
+            bookingStep = 3;
+            setTimeout(() => askForDate(), 800);
+          } else {
+            addBotMessage("Please select a valid theater from the list");
+            askForTheater();
+          }
+        } else {
+          // Handle destination location
+          const validLocations = locations[bookingType].to;
+          if (validLocations.some(loc => loc.toLowerCase().includes(inputLower))) {
+            selectedTo = validLocations.find(loc => loc.toLowerCase().includes(inputLower));
+            addBotMessage(`Destination: ${selectedTo}`);
+            bookingStep = 3;
+            setTimeout(() => askForDate(), 800);
+          } else {
+            addBotMessage("Please select a valid location from the list");
+            askForDestination();
+          }
+        }
+      }
+      else if (bookingStep === 3) {
+        // Step 3: Date selection
+        // This is handled by the date picker, so we don't process text input here
+      }
+      else if (bookingStep === 4) {
+        // Step 4: Class selection
+        const classOptions = prices[bookingType].classOptions;
+        const selectedOption = classOptions.find(opt => 
+          opt.toLowerCase().includes(inputLower) || 
+          inputLower.includes(opt.split(' ')[0].toLowerCase())
+        );
+        
+        if (selectedOption) {
+          bookingClass = selectedOption.split(' ')[0].toLowerCase();
+          addBotMessage(`Class: ${selectedOption}`);
+          
+          // Create booking object
+          currentBooking = {
+            id: 'TW-' + Date.now().toString().slice(-6),
+            userId: currentUser.id,
+            type: bookingType,
+            class: bookingClass,
+            price: calculatePrice(),
+            date: selectedDate,
+            time: getRandomTime(),
+            from: bookingType === 'movie' ? '' : selectedFrom,
+            to: bookingType === 'movie' ? '' : selectedTo,
+            location: bookingType === 'movie' ? selectedTo : '',
+            movie: bookingType === 'movie' ? selectedMovie : '',
+            timestamp: Date.now()
+          };
+          
+          addBotMessage("Processing your booking... <i class='fas fa-spinner fa-spin'></i>");
+          
+          setTimeout(() => {
+            document.getElementById('chatbotScreen').style.display = 'none';
+            document.getElementById('paymentScreen').style.display = 'flex';
+            createConfetti();
+          }, 1500);
+        } else {
+          addBotMessage("Please select a valid class option");
+          askForClass();
+        }
+      }
+    }
+    
+    // Ask for departure location
+    function askForDeparture() {
+      document.getElementById('locationPickerTitle').textContent = `Select Departure ${bookingType === 'flight' ? 'Airport' : 'Station'}`;
+      
+      const locationOptions = document.getElementById('locationOptions');
+      locationOptions.innerHTML = '';
+      
+      locations[bookingType].from.forEach(location => {
+        const option = document.createElement('div');
+        option.className = 'location-option';
+        option.textContent = location;
+        option.onclick = () => {
+          selectedFrom = location;
+          addBotMessage(`Departure: ${location}`);
+          closeLocationPicker();
+          bookingStep = 2;
+          setTimeout(() => askForDestination(), 800);
+        };
+        locationOptions.appendChild(option);
+      });
+      
+      document.getElementById('locationPicker').style.display = 'flex';
+    }
+    
+    // Ask for destination
+    function askForDestination() {
+      document.getElementById('locationPickerTitle').textContent = `Select Destination ${bookingType === 'flight' ? 'Airport' : 'Station'}`;
+      
+      const locationOptions = document.getElementById('locationOptions');
+      locationOptions.innerHTML = '';
+      
+      // Filter out the selected from location
+      const availableLocations = locations[bookingType].to.filter(loc => loc !== selectedFrom);
+      
+      availableLocations.forEach(location => {
+        const option = document.createElement('div');
+        option.className = 'location-option';
+        option.textContent = location;
+        option.onclick = () => {
+          selectedTo = location;
+          addBotMessage(`Destination: ${location}`);
+          closeLocationPicker();
+          bookingStep = 3;
+          setTimeout(() => askForDate(), 800);
+        };
+        locationOptions.appendChild(option);
+      });
+      
+      document.getElementById('locationPicker').style.display = 'flex';
+    }
+    
+    // Ask for movie selection
+    function askForMovie() {
+      document.getElementById('moviePickerTitle').textContent = "Select Movie";
+      
+      const movieOptions = document.getElementById('movieOptions');
+      movieOptions.innerHTML = '';
+      
+      locations.movie.movies.forEach(movie => {
+        const option = document.createElement('div');
+        option.className = 'movie-option';
+        option.innerHTML = `
+          <div class="movie-poster">
+            <i class="fas fa-film"></i>
+          </div>
+          <div>
+            <h4>${movie.name}</h4>
+            <p>${movie.genre} • ${movie.duration}</p>
+          </div>
+        `;
+        option.onclick = () => {
+          selectedMovie = movie.name;
+          addBotMessage(`You selected: ${movie.name}`);
+          closeMoviePicker();
+          bookingStep = 2;
+          setTimeout(() => askForTheater(), 800);
+        };
+        movieOptions.appendChild(option);
+      });
+      
+      document.getElementById('moviePicker').style.display = 'flex';
+    }
+    
+    // Ask for theater selection
+    function askForTheater() {
+      document.getElementById('locationPickerTitle').textContent = "Select Theater";
+      
+      const locationOptions = document.getElementById('locationOptions');
+      locationOptions.innerHTML = '';
+      
+      locations.movie.theaters.forEach(theater => {
+        const option = document.createElement('div');
+        option.className = 'location-option';
+        option.textContent = theater;
+        option.onclick = () => {
+          selectedTo = theater; // Using selectedTo for theater
+          addBotMessage(`Theater: ${theater}`);
+          closeLocationPicker();
+          bookingStep = 3;
+          setTimeout(() => askForDate(), 800);
+        };
+        locationOptions.appendChild(option);
+      });
+      
+      document.getElementById('locationPicker').style.display = 'flex';
+    }
+    
+    // Ask for date
+    function askForDate() {
+      addBotMessage("Please select your date:");
+      document.getElementById('datePickerTitle').textContent = "Select Date";
+      document.getElementById('datePicker').style.display = 'flex';
+    }
+    
+    // Ask for class
+    function askForClass() {
+      addBotMessage(`Please select your ${bookingType === 'movie' ? 'ticket type' : 'class'}:`);
+      addBotMessage(prices[bookingType].classOptions.join("<br>"));
+    }
+    
+    // Close location picker
+    function closeLocationPicker() {
+      document.getElementById('locationPicker').style.display = 'none';
+    }
+    
+    // Close movie picker
+    function closeMoviePicker() {
+      document.getElementById('moviePicker').style.display = 'none';
+    }
+    
+    // Close date picker
+    function closeDatePicker() {
+      document.getElementById('datePicker').style.display = 'none';
+    }
+    
+    // Enter key support
+    function handleKeyPress(e) {
+      if (e.key === 'Enter') sendMessage();
+    }
+    
+    // Calculate price based on selections
+    function calculatePrice() {
+      return prices[bookingType][bookingClass];
+    }
+    
+    // Generate random time
+    function getRandomTime() {
+      const hours = Math.floor(Math.random() * 12) + 1;
+      const minutes = Math.floor(Math.random() * 60);
+      const ampm = Math.random() > 0.5 ? 'AM' : 'PM';
+      return `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+    }
+    
+    // Generate calendar
+    function generateCalendar() {
+      const calendar = document.getElementById('calendar');
+      calendar.innerHTML = '';
+      
+      // Add day headers
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      days.forEach(day => {
+        const dayElement = document.createElement('div');
+        dayElement.className = 'date-picker-day';
+        dayElement.textContent = day;
+        dayElement.style.fontWeight = 'bold';
+        calendar.appendChild(dayElement);
+      });
+      
+      // Get current date
+      const today = new Date();
+      const currentMonth = today.getMonth();
+      const currentYear = today.getFullYear();
+      
+      // Get first day of month
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      
+      // Get days in month
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      
+      // Add empty cells for days before first day
+      for (let i = 0; i < firstDay; i++) {
+        const emptyElement = document.createElement('div');
+        emptyElement.className = 'date-picker-day disabled';
+        calendar.appendChild(emptyElement);
+      }
+      
+      // Add days of month
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayElement = document.createElement('div');
+        dayElement.className = 'date-picker-day';
+        dayElement.textContent = day;
+        
+        // Highlight today
+        if (day === today.getDate() && currentMonth === today.getMonth()) {
+          dayElement.classList.add('selected');
+        }
+        
+        dayElement.onclick = () => selectDate(day, currentMonth, currentYear);
+        calendar.appendChild(dayElement);
+      }
+    }
+    
+    // Select date from picker
+    function selectDate(day, month, year) {
+      const selectedDateObj = new Date(year, month, day);
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      selectedDate = selectedDateObj.toLocaleDateString('en-IN', options);
+      
+      // Add bot message with selected date
+      addBotMessage(`Date: ${selectedDate}`);
+      closeDatePicker();
+      
+      // Move to next step
+      bookingStep = 4;
+      setTimeout(() => askForClass(), 800);
+    }
+    
+    // Show movie details
+    function showMovieDetails(movieId) {
+      const movie = locations.movie.movies.find(m => m.id === movieId);
+      if (movie) {
+        alert(`Movie: ${movie.name}\nGenre: ${movie.genre}\nDuration: ${movie.duration}`);
+      }
+    }
+    
+    // Show flight details
+    function showFlightDetails(routeId) {
+      const route = popularRoutes[routeId];
+      if (route) {
+        alert(`Route: ${route.from} → ${route.to}\nDuration: ${route.duration}\nPrice: ₹${route.price}`);
+      }
+    }
+    
+    // Payment function
+    function pay(method) {
+      createConfetti();
+      
+      // Show processing
+      const paymentTitle = document.getElementById('paymentTitle');
+      paymentTitle.innerHTML = `Processing <span class="spinner"></span>`;
+      
+      setTimeout(() => {
+        // Complete booking
+        bookings.push(currentBooking);
+        localStorage.setItem('ticketWaveBookings', JSON.stringify(bookings));
+        
+        // Update ticket screen
+        updateTicketScreen();
+        
+        // Show ticket
+        document.getElementById('paymentScreen').style.display = 'none';
+        document.getElementById('ticketScreen').style.display = 'flex';
+        
+        // Reset payment title
+        paymentTitle.innerHTML = "Complete Your Payment";
+      }, 2000);
+    }
+    
+    // Update ticket screen with booking details
+    function updateTicketScreen() {
+      document.getElementById('ticketType').textContent = 
+        `${bookingType.charAt(0).toUpperCase() + bookingType.slice(1)} Ticket`;
+      document.getElementById('ticketId').textContent = `ID: ${currentBooking.id}`;
+      document.getElementById('ticketName').textContent = currentUser.username;
+      document.getElementById('ticketDate').textContent = currentBooking.date;
+      document.getElementById('ticketTime').textContent = currentBooking.time;
+      
+      if (bookingType === 'movie') {
+        document.getElementById('ticketLocation').textContent = currentBooking.location;
+        document.getElementById('locationLabel').textContent = "Theater";
+        document.getElementById('seatLabel').textContent = "Ticket Type";
+        document.getElementById('ticketSeat').textContent = 
+          `${bookingClass.charAt(0).toUpperCase() + bookingClass.slice(1)}`;
+      } else {
+        document.getElementById('ticketLocation').textContent = 
+          `${currentBooking.from} → ${currentBooking.to}`;
+        document.getElementById('locationLabel').textContent = "Route";
+        document.getElementById('seatLabel').textContent = "Class";
+        document.getElementById('ticketSeat').textContent = 
+          `${bookingClass.charAt(0).toUpperCase() + bookingClass.slice(1)}`;
+      }
+      
+      document.getElementById('ticketPrice').textContent = `₹${currentBooking.price}`;
+    }
+    
+    // Confetti effect
+    function createConfetti() {
+      const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];
+      
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.width = Math.random() * 10 + 5 + 'px';
+        confetti.style.height = Math.random() * 10 + 5 + 'px';
+        confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+        document.body.appendChild(confetti);
+        
+        setTimeout(() => {
+          confetti.remove();
+        }, 5000);
+      }
+    }
+    
+    // Download ticket as PDF
+    function downloadTicket() {
+      const doc = new jsPDF();
+      
+      // Add ticket content
+      doc.setFontSize(20);
+      doc.text('TicketWave', 105, 20, { align: 'center' });
+      
+      doc.setFontSize(16);
+      doc.text(`${bookingType.charAt(0).toUpperCase() + bookingType.slice(1)} Ticket`, 105, 30, { align: 'center' });
+      
+      doc.setFontSize(12);
+      doc.text(`ID: ${currentBooking.id}`, 105, 40, { align: 'center' });
+      
+      // Add line
+      doc.line(20, 45, 190, 45);
+      
+      // Add details
+      doc.setFontSize(14);
+      doc.text('Name:', 20, 60);
+      doc.text(currentUser.username, 60, 60);
+      
+      doc.text('Date:', 20, 70);
+      doc.text(currentBooking.date, 60, 70);
+      
+      doc.text('Time:', 20, 80);
+      doc.text(currentBooking.time, 60, 80);
+      
+      if (bookingType === 'movie') {
+        doc.text('Movie:', 20, 90);
+        doc.text(currentBooking.movie, 60, 90);
+        
+        doc.text('Theater:', 20, 100);
+        doc.text(currentBooking.location, 60, 100);
+        
+        doc.text('Ticket Type:', 20, 110);
+        doc.text(`${bookingClass.charAt(0).toUpperCase() + bookingClass.slice(1)}`, 60, 110);
+      } else {
+        doc.text('From:', 20, 90);
+        doc.text(currentBooking.from, 60, 90);
+        
+        doc.text('To:', 20, 100);
+        doc.text(currentBooking.to, 60, 100);
+        
+        doc.text('Class:', 20, 110);
+        doc.text(`${bookingClass.charAt(0).toUpperCase() + bookingClass.slice(1)}`, 60, 110);
+      }
+      
+      doc.text('Price:', 20, 120);
+      doc.text(`₹${currentBooking.price}`, 60, 120);
+      
+      // Add QR code placeholder
+      doc.setFillColor(200);
+      doc.rect(140, 55, 40, 40, 'F');
+      doc.text('QR Code', 160, 80, { align: 'center' });
+      
+      // Save the PDF
+      doc.save(`TicketWave_${currentBooking.id}.pdf`);
+    }
+    
+    // Download specific booking
+    function downloadBooking(bookingId) {
+      const booking = bookings.find(b => b.id === bookingId);
+      if (!booking) return;
+      
+      currentBooking = booking;
+      bookingType = booking.type;
+      bookingClass = booking.class;
+      downloadTicket();
+    }
+    
+    // Cancel booking
+    function cancelBooking(bookingId) {
+      if (confirm('Are you sure you want to cancel this booking?')) {
+        bookings = bookings.filter(b => b.id !== bookingId);
+        localStorage.setItem('ticketWaveBookings', JSON.stringify(bookings));
+        showDashboard();
+      }
+    }
+    
+    // View booking history
+    function viewHistory() {
+      document.getElementById('ticketScreen').style.display = 'none';
+      document.getElementById('historyScreen').style.display = 'flex';
+      
+      const historyList = document.getElementById('historyList');
+      historyList.innerHTML = '';
+      
+      const userBookings = bookings.filter(b => b.userId === currentUser.id);
+      if (userBookings.length === 0) {
+        historyList.innerHTML = '<div class="bot-msg">No bookings found</div>';
+        return;
+      }
+      
+      // Sort by most recent
+      userBookings.sort((a, b) => b.timestamp - a.timestamp);
+      
+      userBookings.forEach(booking => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        
+        let locationInfo = '';
+        if (booking.type === 'movie') {
+          locationInfo = `<p>Theater: ${booking.location}</p>`;
+        } else {
+          locationInfo = `<p>From: ${booking.from} To: ${booking.to}</p>`;
+        }
+        
+        item.innerHTML = `
+          <h3>${booking.type.charAt(0).toUpperCase() + booking.type.slice(1)} Ticket</h3>
+          <p>ID: ${booking.id}</p>
+          <p>Date: ${booking.date} • ${booking.time}</p>
+          ${locationInfo}
+          <p>Price: ₹${booking.price}</p>
+        `;
+        item.onclick = () => viewBookingDetails(booking);
+        historyList.appendChild(item);
+      });
+    }
+    
+    // View specific booking details
+    function viewBookingDetails(booking) {
+      currentBooking = booking;
+      bookingType = booking.type;
+      bookingClass = booking.class;
+      
+      updateTicketScreen();
+      document.getElementById('historyScreen').style.display = 'none';
+      document.getElementById('ticketScreen').style.display = 'flex';
+    }
+    
+    // Logout function
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem('currentUser');
+      updateUserGreeting();
+      showHomepage();
+    }
+  </script>
+</body>
+</html>
